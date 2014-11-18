@@ -19,14 +19,20 @@ public class FractionCalculator
 
         for(int i=0; i<myInstructions.length; i++)
         {
-            char c = myInstructions[i].charAt(0);
-            if(Character.isLetter(c))
+            if(Character.isLetter(myInstructions[i].charAt(0)))
             {
-
+                int l =2;
             }
-            else if (Character.isDigit(c))
+            else if (Character.isDigit(myInstructions[i].charAt(0)))
             {
-
+                if (myInstructions[i].length()>1)
+                {
+                    int m = 1;
+                }
+            }
+            else if (myInstructions[i].equals("*")||myInstructions[i].equals("+")||myInstructions[i].equals("-")||myInstructions[i].equals("/"))
+            {
+                int k =3;
             }
         }
 
