@@ -11,7 +11,7 @@ public class FractionCalculator
         operation = "None";
     }
 
-    public void evaluate(Fraction fraction, String inputString)
+    public String evaluate(Fraction fraction, String inputString)
     {
         String [] myInstructions = parseInstructions(inputString);
         result.setNumerator(fraction.getNumerator());
@@ -21,7 +21,7 @@ public class FractionCalculator
         {
             if(Character.isLetter(myInstructions[i].charAt(0)))
             {
-                int l =2;
+                executeInstruction(myInstructions[i]);
             }
             else if (Character.isDigit(myInstructions[i].charAt(0)))
             {
@@ -32,14 +32,54 @@ public class FractionCalculator
             }
             else if (myInstructions[i].equals("*")||myInstructions[i].equals("+")||myInstructions[i].equals("-")||myInstructions[i].equals("/"))
             {
-                int k =3;
+                rememberOperation(myInstructions[i]);
             }
+        }
+        return this.result.toString();
+    }
+    private void executeInstruction(String myInstruction)
+    {
+        if(Character.toLowerCase(myInstruction.charAt(0))=='a')
+        {
+            this.result.absValue(this.result);
+        }
+        else if (Character.toLowerCase(myInstruction.charAt(0))=='n')
+        {
+            this.result.negate(this.result);
+        }
+        else if (Character.toLowerCase(myInstruction.charAt(0))=='c')
+        {
+            this.reset();
+        }
+        else if (Character.toLowerCase(myInstruction.charAt(0))=='q')
+        {
+            //terminate calculator
+        }
+        else
+        {
+            this.reset();
+            //return error message
+        }
+    }
+
+    private void rememberOperation(String myOperator)
+    {
+        if(this.operation.equals("None"))
+        {
+            this.operation=myOperator;
+        }
+        else
+        {
+            this.reset();
         }
 
     }
 
     private void reset()
     {
+        this.result.setNumerator(0);
+        this.result.setDenominator(1);
+        this.operation="None";
     }
 
     private String [] parseInstructions (String instructions)
