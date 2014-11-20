@@ -1,9 +1,11 @@
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class FractionCalculator
 {
     private Fraction result;
     private String operation;
+    Scanner scanner = new Scanner(System.in);
 
     public FractionCalculator()
     {
@@ -25,9 +27,25 @@ public class FractionCalculator
             }
             else if (Character.isDigit(myInstructions[i].charAt(0)))
             {
+               Fraction myFraction = new Fraction(0,1);
+                myFraction.setNumerator(Integer.parseInt(myInstructions[i].substring(0, 1)));
                 if (myInstructions[i].length()>1)
                 {
-                    int m = 1;
+                    myFraction.setDenominator(Integer.parseInt(myInstructions[i].substring(2)));
+                }
+                else
+                {
+                    myFraction.setDenominator(1);
+                }
+                if (this.operation.equals("None"))
+                {
+                    this.result.setNumerator(myFraction.getNumerator());
+                    this.result.setDenominator(myFraction.getDenominator());
+                }
+                else
+                {
+                    calculate(myFraction);
+                    this.operation="None";
                 }
             }
             else if (myInstructions[i].equals("*")||myInstructions[i].equals("+")||myInstructions[i].equals("-")||myInstructions[i].equals("/"))
@@ -37,6 +55,30 @@ public class FractionCalculator
         }
         return this.result.toString();
     }
+    private void calculate (Fraction myFraction)
+    {
+        if(this.operation.equals("*"))
+        {
+            this.result.setNumerator((this.result.multiply(myFraction)).getNumerator());
+            this.result.setDenominator((this.result.multiply(myFraction)).getDenominator());
+        }
+        else if (this.operation.equals("+"))
+        {
+            this.result.setNumerator((this.result.add(myFraction)).getNumerator());
+            this.result.setDenominator((this.result.add(myFraction)).getDenominator());
+        }
+        else if (this.operation.equals("-"))
+        {
+            this.result.setNumerator((this.result.subtract(myFraction)).getNumerator());
+            this.result.setDenominator((this.result.subtract(myFraction)).getDenominator());
+        }
+        else if (this.operation.equals("/"))
+        {
+            this.result.setNumerator((this.result.divide(myFraction)).getNumerator());
+            this.result.setDenominator((this.result.divide(myFraction)).getDenominator());
+        }
+    }
+
     private void executeInstruction(String myInstruction)
     {
         if(Character.toLowerCase(myInstruction.charAt(0))=='a')
@@ -53,12 +95,13 @@ public class FractionCalculator
         }
         else if (Character.toLowerCase(myInstruction.charAt(0))=='q')
         {
-            //terminate calculator
+            System.exit(1);
         }
         else
         {
             this.reset();
-            //return error message
+            System.out.print("You have provided an invalid input. Calculator will terminate now");
+            System.exit(1);
         }
     }
 
