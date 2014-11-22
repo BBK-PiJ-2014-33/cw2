@@ -1,6 +1,4 @@
-/*
- * Created by keith for the second coursework assignment.
- */
+
 public class Fraction {
     private int numerator;
     private int denominator;
@@ -142,9 +140,15 @@ public class Fraction {
         int num;
         int denom;
 
-        num = other.getNumerator() * -1;
-        denom = other.getDenominator() * -1;
-        return new Fraction(num,denom);
+        if ((other.getNumerator()<1)||(other.getDenominator()<1))
+        {
+            return absValue(other);
+        }
+        else {
+            num = other.getNumerator() * -1;
+            denom = Math.abs(other.getDenominator());
+            return new Fraction(num, denom);
+        }
     }
 
     private int myGcd(int a, int b)

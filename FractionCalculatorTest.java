@@ -8,7 +8,6 @@ public class FractionCalculatorTest {
         userInstructions = scanner.nextLine();
         Fraction myFraction = new Fraction(0,1);
         FractionCalculator myFractionCalculator = new FractionCalculator();
-        myFractionCalculator.evaluate(myFraction,userInstructions);
-
+        System.out.println(myFractionCalculator.evaluate(myFraction,userInstructions));
     }
 }

@@ -5,6 +5,8 @@ public class FractionCalculator
 {
     private Fraction result;
     private String operation;
+    private String exitMessage;
+    private Boolean errorFlag = false;
     Scanner scanner = new Scanner(System.in);
 
     public FractionCalculator()
@@ -13,85 +15,88 @@ public class FractionCalculator
         operation = "None";
     }
 
-    public String evaluate(Fraction fraction, String inputString)
-    {
-        String [] myInstructions = parseInstructions(inputString);
+    public String evaluate(Fraction fraction, String inputString) {
+        String[] myInstructions = parseInstructions(inputString);
         result.setNumerator(fraction.getNumerator());
         result.setDenominator(fraction.getDenominator());
 
-        for(int i=0; i<myInstructions.length; i++)
-        {
-            if(Character.isLetter(myInstructions[i].charAt(0)))
-            {
-                executeInstruction(myInstructions[i]);
-            }
-            else if (Character.isDigit(myInstructions[i].charAt(0)))
-            {
-               Fraction myFraction = new Fraction(0,1);
-                myFraction.setNumerator(Integer.parseInt(myInstructions[i].substring(0, 1)));
-                if (myInstructions[i].length()>1)
-                {
-                    myFraction.setDenominator(Integer.parseInt(myInstructions[i].substring(2)));
+        for (int i = 0; i < myInstructions.length; i++) {
+            if (errorFlag != true) {
+                if (Character.isLetter(myInstructions[i].charAt(0))) {
+                    executeInstruction(myInstructions[i]);
+                } else if (Character.isDigit(myInstructions[i].charAt(0))) {
+                    Fraction myFraction = new Fraction(0, 1);
+                    myFraction.setNumerator(Integer.parseInt(myInstructions[i].substring(0, 1)));
+                    if (myInstructions[i].length() > 1) {
+                        myFraction.setDenominator(Integer.parseInt(myInstructions[i].substring(2)));
+                    } else {
+                        myFraction.setDenominator(1);
+                    }
+                    if (operation.equals("None")) {
+                        result.setNumerator(myFraction.getNumerator());
+                        result.setDenominator(myFraction.getDenominator());
+                    } else {
+                        calculate(myFraction);
+                        operation = "None";
+                    }
+                } else if (myInstructions[i].equals("*") || myInstructions[i].equals("+") || myInstructions[i].equals("-") || myInstructions[i].equals("/")) {
+                    rememberOperation(myInstructions[i]);
+                } else {
+                    throwError();
                 }
-                else
-                {
-                    myFraction.setDenominator(1);
-                }
-                if (this.operation.equals("None"))
-                {
-                    this.result.setNumerator(myFraction.getNumerator());
-                    this.result.setDenominator(myFraction.getDenominator());
-                }
-                else
-                {
-                    calculate(myFraction);
-                    this.operation="None";
-                }
-            }
-            else if (myInstructions[i].equals("*")||myInstructions[i].equals("+")||myInstructions[i].equals("-")||myInstructions[i].equals("/"))
-            {
-                rememberOperation(myInstructions[i]);
+            } else {
+                break;
             }
         }
-        return this.result.toString();
+
+        if (errorFlag)
+        {
+            errorFlag = false;
+            return "Error";
+        }
+        else
+        {
+            return result.toString();
+        }
     }
+
     private void calculate (Fraction myFraction)
     {
-        if(this.operation.equals("*"))
+        Fraction fraction = new Fraction(0,1);
+        if(operation.equals("*"))
         {
-            this.result.setNumerator((this.result.multiply(myFraction)).getNumerator());
-            this.result.setDenominator((this.result.multiply(myFraction)).getDenominator());
+            fraction = result.multiply(myFraction);
         }
-        else if (this.operation.equals("+"))
+        else if (operation.equals("+"))
         {
-            this.result.setNumerator((this.result.add(myFraction)).getNumerator());
-            this.result.setDenominator((this.result.add(myFraction)).getDenominator());
+            fraction = result.add(myFraction);
         }
-        else if (this.operation.equals("-"))
+        else if (operation.equals("-"))
         {
-            this.result.setNumerator((this.result.subtract(myFraction)).getNumerator());
-            this.result.setDenominator((this.result.subtract(myFraction)).getDenominator());
+            fraction = result.subtract(myFraction);
         }
         else if (this.operation.equals("/"))
         {
-            this.result.setNumerator((this.result.divide(myFraction)).getNumerator());
-            this.result.setDenominator((this.result.divide(myFraction)).getDenominator());
+            fraction = result.divide(myFraction);
         }
+        result.setNumerator(fraction.getNumerator());
+        result.setDenominator(fraction.getDenominator());
     }
 
     private void executeInstruction(String myInstruction)
     {
         if(Character.toLowerCase(myInstruction.charAt(0))=='a')
         {
-            this.result.absValue(this.result);
+            result.absValue(result);
         }
         else if (Character.toLowerCase(myInstruction.charAt(0))=='n')
         {
-            this.result.negate(this.result);
+            result.negate(result);
         }
         else if (Character.toLowerCase(myInstruction.charAt(0))=='c')
         {
-            this.reset();
+            result.setNumerator(0);
+            result.setDenominator(1);
         }
         else if (Character.toLowerCase(myInstruction.charAt(0))=='q')
         {
@@ -99,30 +104,33 @@ public class FractionCalculator
         }
         else
         {
-            this.reset();
-            System.out.print("You have provided an invalid input. Calculator will terminate now");
-            System.exit(1);
+            throwError();
         }
+    }
+
+    private void throwError()
+    {
+        reset();
+        errorFlag = true;
     }
 
     private void rememberOperation(String myOperator)
     {
-        if(this.operation.equals("None"))
+        if(operation.equals("None"))
         {
-            this.operation=myOperator;
+            operation=myOperator;
         }
         else
         {
-            this.reset();
+            throwError();
         }
-
     }
 
     private void reset()
     {
-        this.result.setNumerator(0);
-        this.result.setDenominator(1);
-        this.operation="None";
+        result.setNumerator(0);
+        result.setDenominator(1);
+        operation="None";
     }
 
     private String [] parseInstructions (String instructions)
@@ -139,10 +147,9 @@ public class FractionCalculator
             {
                 myItem = myItem+1;
             }
-
-
         return instructionsArray;
     }
+
     private int getNumberOfItemsInString(String myString)
     {
         int NumberOfItems=0;
