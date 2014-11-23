@@ -1,6 +1,4 @@
-/*
- * Created by keith for the second coursework assignment.
- */
+
 public class FractionTest {
     public static void main(String[] args) {
 

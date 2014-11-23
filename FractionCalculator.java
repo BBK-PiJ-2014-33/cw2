@@ -3,10 +3,33 @@ import java.util.Scanner;
 
 public class FractionCalculator
 {
+    public static void main(String[] args) {
+        System.out.print("Hello! You are running Fraction Calculator designed by Liudmila Veshneva. Please input your instructions: ");
+        Scanner myScanner = new Scanner(System.in);
+        FractionCalculator myCalculator = new FractionCalculator();
+        String myInstructions = "";
+
+        while (myScanner.hasNextLine()) {
+            myInstructions = myScanner.nextLine();
+            if (myInstructions.equals("q") || myInstructions.equals("quit") || myInstructions.equals("Q") || myInstructions.equals("")) {
+                System.out.println("Goodbye");
+                break;
+            } else {
+                myCalculator.evaluate(myCalculator.result, myInstructions);
+                if (myCalculator.errorFlag) {
+                    System.out.println("Error");
+                    myCalculator.errorFlag = false;
+                } else {
+                    System.out.println(myCalculator.result.toString());
+                }
+            }
+        }
+        myScanner.close();
+    }
+
     private Fraction result;
     private String operation;
     private Boolean errorFlag = false;
-    Scanner scanner = new Scanner(System.in);
 
     public FractionCalculator()
     {
@@ -44,8 +67,6 @@ public class FractionCalculator
                     throwError();
                 }
             } else {
-                System.out.println("Error");
-                errorFlag = false;
                 break;
             }
         }
@@ -91,14 +112,9 @@ public class FractionCalculator
             result.setNumerator(fraction.getNumerator());
             result.setDenominator(fraction.getDenominator());
         }
-        else if (Character.toLowerCase(myInstruction.charAt(0))=='c')
-        {
+        else if (Character.toLowerCase(myInstruction.charAt(0))=='c') {
             result.setNumerator(0);
             result.setDenominator(1);
-        }
-        else if (Character.toLowerCase(myInstruction.charAt(0))=='q')
-        {
-            System.exit(1);
         }
         else
         {

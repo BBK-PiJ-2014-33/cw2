@@ -3,7 +3,6 @@ import java.util.Scanner;
 public class FractionCalculatorTest {
     public static void main(String[] args) {
 
-        //System.out.print("Hello! You are running Fraction Calculator designed by Liudmila Veshneva. Please input your instructions: ");
         Fraction myFraction = new Fraction(0,1);
        // System.out.println(myFractionCalculator.evaluate(myFraction,userInstructions));
         FractionCalculator myFractionCalculator = new FractionCalculator();
