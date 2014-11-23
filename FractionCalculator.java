@@ -5,7 +5,6 @@ public class FractionCalculator
 {
     private Fraction result;
     private String operation;
-    private String exitMessage;
     private Boolean errorFlag = false;
     Scanner scanner = new Scanner(System.in);
 
@@ -15,7 +14,7 @@ public class FractionCalculator
         operation = "None";
     }
 
-    public String evaluate(Fraction fraction, String inputString) {
+    public void evaluate(Fraction fraction, String inputString) {
         String[] myInstructions = parseInstructions(inputString);
         result.setNumerator(fraction.getNumerator());
         result.setDenominator(fraction.getDenominator());
@@ -45,18 +44,10 @@ public class FractionCalculator
                     throwError();
                 }
             } else {
+                System.out.println("Error");
+                errorFlag = false;
                 break;
             }
-        }
-
-        if (errorFlag)
-        {
-            errorFlag = false;
-            return "Error";
-        }
-        else
-        {
-            return result.toString();
         }
     }
 
@@ -87,11 +78,18 @@ public class FractionCalculator
     {
         if(Character.toLowerCase(myInstruction.charAt(0))=='a')
         {
-            result.absValue(result);
+            Fraction fraction;
+            fraction = result.absValue(result);
+            result.setNumerator(fraction.getNumerator());
+            result.setDenominator(fraction.getDenominator());
+
         }
         else if (Character.toLowerCase(myInstruction.charAt(0))=='n')
         {
-            result.negate(result);
+            Fraction fraction;
+            fraction=result.negate(result);
+            result.setNumerator(fraction.getNumerator());
+            result.setDenominator(fraction.getDenominator());
         }
         else if (Character.toLowerCase(myInstruction.charAt(0))=='c')
         {
@@ -165,5 +163,9 @@ public class FractionCalculator
             }
         }
         return NumberOfItems+1;
+    }
+    public Fraction getFraction()
+    {
+        return result;
     }
 }
